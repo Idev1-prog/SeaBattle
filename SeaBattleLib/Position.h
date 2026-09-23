@@ -39,6 +39,8 @@ public:
 
 	void row(int);
 	void col(int);
+	static int max_row() noexcept { return _max_row; }
+	static int max_col() noexcept { return _max_col; }
 	inline int row() const noexcept { return _row; }
 	inline int col() const noexcept { return _col; }
 
