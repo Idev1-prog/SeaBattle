@@ -1,6 +1,8 @@
 #include <iostream>
+#include "Game.h"
 
 int main() {
-	std::cout << "Test";
+	Game game;
+	game.start();
 	return 200;
 }
