@@ -1,58 +1,60 @@
 #include "Position.h"
 
-Position::Position() :
-	_row(1),
-	_col(1) {
+using std::logic_error;
+
+bool is_collision(int row) {
+    return row < 1 || row > Position::_max_row;
 }
 
-Position::Position(int row, int col) {
-	if (row < 1 || row > _max_row)
-		throw std::logic_error("Invalid input: incorrect position");
-	if (col < 1 || col > _max_col)
-		throw std::logic_error("Invalid input: incorrect position");
+bool is_collision(char col) {
+    const char c = static_cast<char>(toupper(col));
+    return c < 'A' || c > static_cast<char>('A' + Position::_max_col - 1);
+}
 
-	_row = row;
-	_col = col;
+Position::Position() {
+    _row = rand() % _max_row;
+    _col = rand() % _max_col;
+}
+
+Position::Position(int row, int col) : _row(row), _col(col) {
+    if (is_collision(_row) || is_collision(static_cast<char>(_col + 'A' - 1)))
+        throw logic_error("Invalid input: incorrect position");
+    if (_col < 1 || _col > _max_col) throw logic_error("Invalid input: incorrect position");
+}
+
+Position::Position(int row, char col) : _row(row), _col(0) {
+    if (is_collision(_row)) throw logic_error("Invalid input: incorrect position");
+    if (is_collision(col)) throw logic_error("Invalid input: incorrect position");
+    _col = toupper(col) - 'A' + 1;
+}
+
+Position::Position(const std::string& str) : _row(0), _col(0) {
+    parse(str, *this);
 }
 
 void Position::row(int row) {
-	if (row < 1 || row > _max_row)
-		throw std::logic_error("Invalid input: incorrect position");
-	_row = row;
+    if (is_collision(row)) throw logic_error("Invalid input: incorrect position");
+    _row = row;
 }
 
 void Position::col(int col) {
-	if (col < 1 || col > _max_col)
-		throw std::logic_error("Invalid input: incorrect position");
-
-	_col = col;
+    if (col < 1 || col > _max_col) throw logic_error("Invalid input: incorrect position");
+    _col = col;
 }
 
-Position parse(const std::string& str) {
-	std::istringstream iss(str);
-	char ch1, ch2, ch3;
-	int row, col;
-
-	iss >> ch1 >> row >> ch2 >> col >> ch3;
-
-	if (ch1 != '(' || ch2 != ',' || ch3 != ')' || iss.fail()) {
-		throw std::logic_error("Invalid input: incorrect position");
-	}
-
-	if (row < 1 || row > Position::_max_row || col < 1 || col > Position::_max_col) {
-		throw std::logic_error("Invalid input: incorrect position");
-	}
-
-	return Position(row, col);
+void Position::col(char col) {
+    if (is_collision(col)) throw logic_error("Invalid input: incorrect position");
+    _col = toupper(col) - 'A' + 1;
 }
 
-std::string to_string(const Position& pos) {
-	std::string str;
-	str.append(1, '(');
-	str.append(std::to_string(pos._row));
-	str.append(", ");
-	str.append(std::to_string(pos._col));
-	str.append(1, ')');
+void parse(const std::string& str, Position& position) {
+    int row = 0;
+    char col = '\0';
+    std::istringstream iss(str);
 
-	return str;
+    if (!(iss >> row)) throw logic_error("Invalid input: incorrect position");
+    if (!(iss >> col)) throw logic_error("Invalid input: incorrect position");
+
+    position.row(row);
+    position.col(col);
 }
