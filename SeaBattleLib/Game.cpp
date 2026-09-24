@@ -97,15 +97,34 @@ void Game::show_game_window() const {
     std::cout << std::endl;
 }
 
+void Game::init() {
+    std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<int> row_dist(1, 10);
+    std::uniform_int_distribution<int> col_dist(1, 10);
+    std::uniform_int_distribution<int> dir_dist(0, 1);
+
+    const int sizes[] = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
+
+    for (int size : sizes) {
+        for (Player* p : { &_user, &_computer }) {
+            while (true) {
+                int row = row_dist(rng);
+                int col = col_dist(rng);
+                Direction dir = dir_dist(rng) == 0
+                    ? Direction::Horizontal
+                    : Direction::Vertical;
+                try {
+                    p->set_ship(Ship(size, Position(row, col), dir));
+                    break;
+                }
+                catch (const std::logic_error&) { continue; }
+            }
+        }
+    }
+}
+
 void Game::start() {
-    std::string input;
-
-    std::getline(std::cin, input);
-    user_init(input);
-
-    std::getline(std::cin, input);
-    std::getline(std::cin, input);
-    computer_init(input);
+    init();
 
     std::cout << "Game started!" << std::endl << std::endl;
 

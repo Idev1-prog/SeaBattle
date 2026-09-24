@@ -13,6 +13,7 @@ class Game {
 
     bool is_end() const noexcept;
     void show_game_window() const;
+    void init();
 
     static bool is_hit(State s) noexcept;
     static bool parse_line(const std::string& line, Ship& ship);
