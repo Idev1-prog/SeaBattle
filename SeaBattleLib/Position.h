@@ -6,6 +6,10 @@
 #include <stdexcept>
 #include <cctype>
 #include <random>
+#include <vector>
+#include <queue>
+
+// #define DEBUG
 
 class Position {
 private:

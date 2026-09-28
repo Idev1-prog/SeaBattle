@@ -157,12 +157,17 @@ bool Game::is_hit(State s) noexcept {
 
 void Game::show_game_window() const {
     std::cout << "= COMPUTER GAME FIELD =" << std::endl << std::endl;
-    _computer.show_field(true);
+#ifdef DEBUG
+    _computer.show_field(true); // показываем поле с кораблями у противника
+#else
+    _computer.show_field(false);  // скрываем корабли на поле противника
+#endif
     std::cout << std::endl;
     std::cout << "=== YOUR PLAY FIELD ===" << std::endl << std::endl;
     _user.show_field(false);
     std::cout << std::endl;
 }
+
 
 void Game::start() {
 
