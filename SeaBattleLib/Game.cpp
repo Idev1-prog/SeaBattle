@@ -1,6 +1,4 @@
 ﻿#include "Game.h"
-//#include <cstdlib> // rand(), srand()
-//#include <ctime>   // time()
 
 bool Game::add_ship(std::vector<std::string>& ships, const std::string& ship) {
     for (const auto& s : ships) {
@@ -36,13 +34,10 @@ void Game::computer_init() {
     for (int size : sizes) {
         bool placed = false;
         while (!placed) {
-            // rand() % n даёт число от 0 до n-1, поэтому +1 - клетки поля нумеруются от 1
             int row = rand() % Position::max_row() + 1;
             int col = rand() % Position::max_col() + 1;
             Direction dir = (rand() % 2 == 0) ? Horizontal : Vertical;
 
-            // конструктор Ship сам проверит выход за поле,
-            // а set_ship - столкновения с уже стоящими кораблями
             try {
                 _computer.set_ship(Ship(size, Position(row, col), dir));
                 placed = true;
@@ -55,12 +50,11 @@ void Game::computer_init() {
 }
 
 State Game::user_move() {
-    // ход продолжается до тех пор, пока пользователь не введёт корректный выстрел
     while (true) {
         std::string line;
         std::cout << "Your move (e.g. 5B): ";
         if (!std::getline(std::cin, line)) {
-            throw std::logic_error("Invalid input: incorrect move"); // конец потока ввода
+            throw std::logic_error("Invalid input: incorrect move");
         }
 
         std::istringstream ss(line);
@@ -81,8 +75,6 @@ State Game::user_move() {
 }
 
 Game::Shot Game::random_shot() const {
-    // случайная клетка поля: rand() % (10 * 10) даёт число от 0 до 99
-    // (уже посещённые клетки отфильтрует set_action в computer_move)
     int cell = rand() % (Position::max_row() * Position::max_col());
     Shot shot;
     shot.row = cell / Position::max_col() + 1;
@@ -110,7 +102,7 @@ void Game::clear_logic() {
 }
 
 State Game::computer_move() {
-    // если есть подбитый, но ещё не уничтоженный корабль - исследуем его окрестности
+    // если есть подбитый, но ещё не уничтоженный корабль, исследуем его окрестности
     while (!_target_queue.empty()) {
         Shot s = _target_queue.front();
         _target_queue.pop();
@@ -120,13 +112,13 @@ State Game::computer_move() {
             result = _user.set_action(s.row, s.col);
         }
         catch (std::logic_error&) {
-            continue; // клетка уже посещена - пропускаем
+            continue; // клетка уже посещена выходим
         }
 
         if (result == State::Hit) {
             add_neighbors(s.row, s.col);
         }
-        else if (is_hit(result)) { // корабль уничтожен - логика больше не нужна
+        else if (is_hit(result)) { // корабль уничтожен, выходим
             clear_logic();
         }
         return result;
@@ -141,7 +133,7 @@ State Game::computer_move() {
             result = _user.set_action(s.row, s.col);
         }
         catch (std::logic_error&) {
-            continue; // клетка уже посещена - стреляем в другую
+            continue; // клетка уже посещена, стреляем в другую
         }
 
         if (result == State::Hit) {
@@ -179,10 +171,10 @@ void Game::start() {
     std::cout << "Enter each ship as \"size direction row col\" (e.g. 4 H 1 A)," << std::endl;
     std::cout << "one per line. Type an empty line when you are done:" << std::endl;
 
-    std::vector<std::string> battleship;   // корабли размера 4
-    std::vector<std::string> cruiser;     // корабли размера 3
-    std::vector<std::string> destroyer;    // корабли размера 2
-    std::vector<std::string> boat;         // корабли размера 1
+    std::vector<std::string> battleship;
+    std::vector<std::string> cruiser;
+    std::vector<std::string> destroyer;
+    std::vector<std::string> boat;
 
     std::string input;
     std::string line;
@@ -226,7 +218,6 @@ void Game::start() {
 
     std::cout << std::endl << "Game started!" << std::endl << std::endl;
 
-    // показываем стартовое поле перед первым ходом
     show_game_window();
 
     while (!is_end()) {
