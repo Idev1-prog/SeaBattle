@@ -1,4 +1,4 @@
-#include "Ship.h"
+﻿#include "Ship.h"
 
 void parse(const std::string& str, Ship& ship) {
     int row = 0;

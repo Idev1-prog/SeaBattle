@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 
 const int Player::_max_ships_counts[4] = { 4, 3, 2, 1 };
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Position.h"
 
 enum Direction { Horizontal, Vertical };
