@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Ship.h"
 
 enum State { Missed, BoatDestroyed, DestroyersDestroyed, CruisersDestroyed, BattleshipDestroyed, Hit };
