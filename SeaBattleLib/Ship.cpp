@@ -69,25 +69,25 @@ void parse(const std::string& str, Ship& ship) {
 }
 
 bool is_collision(int size, Position position, Direction direction) {
-        if (size < 1 || size > 4) {
-            return true;
-        }
-
-    int start_row = position.row();
-    int start_col = position.col();
-
-    try {
-        Position start_pos(start_row, start_col);
-        if (direction == Direction::Horizontal) {
-            Position pos(start_row, start_col + size - 1);
-        }
-        else if (direction == Direction::Vertical) {
-            Position pos(start_row + size - 1, start_col);
-        }
-    }
-    catch (std::exception&) {
+    if (size < 1 || size > 4) {
         return true;
     }
+
+    // Границы поля проверяем напрямую по ЧИСЛАМ (row()/col()).
+    // Нельзя оборачивать вычисления в try/catch с Position(int,int):
+    // этот конструктор трактует второй аргумент как ASCII-код буквы,
+    // поэтому строка вида Position(row, col + size - 1) при переполнении
+    // молча создаёт "буквенную" позицию вместо исключения — проверка
+    // никогда не срабатывала бы корректно.
+    const int end_row = (direction == Direction::Vertical)
+        ? position.row() + size - 1
+        : position.row();
+    const int end_col = (direction == Direction::Horizontal)
+        ? position.col() + size - 1
+        : position.col();
+
+    if (end_row > Position::max_row()) return true;
+    if (end_col > Position::max_col()) return true;
 
     return false;
 }
