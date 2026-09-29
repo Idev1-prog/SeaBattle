@@ -222,14 +222,12 @@ TEST(ShipTest, PositionSetterMovesShip) {
     EXPECT_EQ(ship.col(), 3);
 }
 
-TEST(ShipTest, BUG1_ShipCanExtendBeyondFieldEdge) {
-    EXPECT_THROW(Ship(2, Position(10, 'J'), Direction::Horizontal), std::logic_error); // J,K — за правым краем
-    EXPECT_THROW(Ship(3, Position(9, 'A'), Direction::Vertical), std::logic_error);    // A9,A10,A11 — за нижним краем
-    // Ship(4, Position(10, 'G')) НЕ баг: 7+4-1 == 10, корабль G,H,I,J влезает в поле
+TEST(ShipTest, ShipCanExtendBeyondFieldEdge) {
+    EXPECT_THROW(Ship(2, Position(10, 'J'), Direction::Horizontal), std::logic_error);
+    EXPECT_THROW(Ship(3, Position(9, 'A'), Direction::Vertical), std::logic_error);
 
-    // Корабль, который вплотную упирается в край, но не вылезает, — валиден:
-    EXPECT_NO_THROW(Ship(3, Position(1, 'H'), Direction::Horizontal)); // H,I,J
-    EXPECT_NO_THROW(Ship(3, Position(8, 'A'), Direction::Vertical));   // A8,A9,A10
+    EXPECT_NO_THROW(Ship(3, Position(1, 'H'), Direction::Horizontal));
+    EXPECT_NO_THROW(Ship(3, Position(8, 'A'), Direction::Vertical));
 }
 
 TEST(ShipTest, CopyConstructorAndAssignment) {
