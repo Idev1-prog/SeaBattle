@@ -1,6 +1,9 @@
-#include <iostream>
+﻿#include <iostream>
+#include "Game.h"
 
 int main() {
-	std::cout << "Test";
+	srand(time(nullptr));
+	Game game;
+	game.start();
 	return 200;
 }
