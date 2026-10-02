@@ -12,14 +12,13 @@ bool is_collision(char col) {
 }
 
 Position::Position() {
-    _row = rand() % _max_row;
-    _col = rand() % _max_col;
+    _row = 1 + (rand() % _max_row);
+    _col = 1 + (rand() % _max_col);
 }
 
 Position::Position(int row, int col) : _row(row), _col(col) {
     if (is_collision(_row) || is_collision(static_cast<char>(_col + 'A' - 1)))
         throw logic_error("Invalid input: incorrect position");
-    if (_col < 1 || _col > _max_col) throw logic_error("Invalid input: incorrect position");
 }
 
 Position::Position(int row, char col) : _row(row), _col(0) {

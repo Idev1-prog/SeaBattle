@@ -10,11 +10,13 @@ class GameField {
 
 public:
     GameField();
+    GameField(const GameField&) = delete;
     ~GameField();
 
     void set(const Ship& ship);
     State set(int row, char col);
     int check_destroy(int row, int col);
+    GameField& operator=(const GameField&) = delete;
 
     friend std::string to_string(const GameField& field, bool show);
     friend bool is_collision(const GameField& field, const Ship& ship);

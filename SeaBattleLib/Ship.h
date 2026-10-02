@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Position.h"
+#include <cctype>
 
 enum Direction { Horizontal, Vertical };
 class Ship;

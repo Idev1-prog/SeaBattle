@@ -32,13 +32,13 @@ char get_cell(const GameField& field, int row, char col) {
 //POSITION
 
 TEST(PositionTest, DefaultConstructorInsideField) {
-    // Конструктор по умолчанию использует rand() (значения 0..9), проверяем границы
+    // Конструктор по умолчанию использует rand() (значения 1..10), проверяем границы
     for (int i = 0; i < 50; ++i) {
         Position p;
-        EXPECT_GE(p.row(), 0);
-        EXPECT_LE(p.row(), 9);
-        EXPECT_GE(p.col(), 0);
-        EXPECT_LE(p.col(), 9);
+        EXPECT_GE(p.row(), 1);
+        EXPECT_LE(p.row(), 10);
+        EXPECT_GE(p.col(), 1);
+        EXPECT_LE(p.col(), 10);
     }
 }
 
