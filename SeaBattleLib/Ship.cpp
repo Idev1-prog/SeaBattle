@@ -1,5 +1,113 @@
 ﻿#include "Ship.h"
 
+Ship::Ship(int size, Position position, Direction direction) : _size(size), _position(position), _direction(direction) {
+    if (is_collision(size, position, direction)) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+}
+
+Ship::Ship(int size, char direction, int row, char col) {
+    try {
+        _position = Position(row, col);
+    }
+    catch (std::exception&) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+    Direction dir;
+    char d = std::toupper(static_cast<unsigned char>(direction));
+    if (d == 'H') dir = Direction::Horizontal;
+    else if (d == 'V') dir = Direction::Vertical;
+    else throw std::logic_error("Invalid input: incorrect ship");
+
+    if (is_collision(size, _position, dir)) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+    _size = size;
+    _direction = dir;
+}
+
+void Ship::size(int size) {
+    if (is_collision(size, _position, _direction)) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+    _size = size;
+}
+void Ship::row(int row) {
+    try {
+        Position new_pos(row, _position.col());
+        if (is_collision(_size, new_pos, _direction)) {
+            throw std::logic_error("Invalid input: incorrect ship");
+        }
+        _position = new_pos;
+    }
+    catch (std::exception&) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+}
+void Ship::col(int col) {
+    if (col >= 'A' && col <= 'Z') {
+        col = col - 'A' + 1;
+    }
+    else if (col >= 'a' && col <= 'z') {
+        col = col - 'a' + 1;
+    }
+    try {
+        Position new_pos(_position.row(), col);
+        if (is_collision(_size, new_pos, _direction)) {
+            throw std::logic_error("Invalid input: incorrect ship");
+        }
+        _position = new_pos;
+    }
+    catch (std::exception&) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+}
+void Ship::col(char col) {
+    try {
+        Position new_pos(_position.row(), col);
+        if (is_collision(_size, new_pos, _direction)) {
+            throw std::logic_error("Invalid input: incorrect ship");
+        }
+        _position = new_pos;
+    }
+    catch (std::exception&) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+}
+
+void Ship::direction(Direction direction) {
+    if (is_collision(_size, _position, direction)) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+    _direction = direction;
+}
+void Ship::direction(char direction) {
+    Direction dir;
+    char d = std::toupper(static_cast<unsigned char>(direction));
+    if (d == 'H') dir = Direction::Horizontal;
+    else if (d == 'V') dir = Direction::Vertical;
+    else throw std::logic_error("Invalid input: incorrect ship");
+
+    if (is_collision(_size, _position, dir)) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+    _direction = dir;
+}
+
+
+void Ship::position(Position position) {
+    if (is_collision(_size, position, _direction)) {
+        throw std::logic_error("Invalid input: incorrect ship");
+    }
+    _position = position;
+}
+Ship& Ship::operator=(const Ship& ship) {
+    _size = ship._size;
+    _position = ship._position;
+    _direction = ship._direction;
+    return *this;
+}
+
 void parse(const std::string& str, Ship& ship) {
     int row = 0;
     char col = 0;

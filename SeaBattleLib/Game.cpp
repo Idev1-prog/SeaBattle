@@ -115,7 +115,7 @@ State Game::computer_move() {
             continue; // клетка уже посещена выходим
         }
 
-        if (result == State::Hit) {
+        if (result == Hit) {
             add_neighbors(s.row, s.col);
         }
         else if (is_hit(result)) { // корабль уничтожен, выходим
@@ -136,7 +136,7 @@ State Game::computer_move() {
             continue; // клетка уже посещена, стреляем в другую
         }
 
-        if (result == State::Hit) {
+        if (result == Hit) {
             add_neighbors(s.row, s.col);
         }
         else if (is_hit(result)) {
