@@ -15,8 +15,8 @@ Ship::Ship(int size, char direction, int row, char col) {
     }
     Direction dir;
     char d = std::toupper(static_cast<unsigned char>(direction));
-    if (d == 'H') dir = Direction::Horizontal;
-    else if (d == 'V') dir = Direction::Vertical;
+    if (d == 'H') dir = Horizontal;
+    else if (d == 'V') dir = Vertical;
     else throw std::logic_error("Invalid input: incorrect ship");
 
     if (is_collision(size, _position, dir)) {
@@ -84,8 +84,8 @@ void Ship::direction(Direction direction) {
 void Ship::direction(char direction) {
     Direction dir;
     char d = std::toupper(static_cast<unsigned char>(direction));
-    if (d == 'H') dir = Direction::Horizontal;
-    else if (d == 'V') dir = Direction::Vertical;
+    if (d == 'H') dir = Horizontal;
+    else if (d == 'V') dir = Vertical;
     else throw std::logic_error("Invalid input: incorrect ship");
 
     if (is_collision(_size, _position, dir)) {
@@ -131,10 +131,10 @@ void parse(const std::string& str, Ship& ship) {
     if (i < str.size() && std::isalpha(str[i])) {
         dir = str[i];
         if (dir == 'V' || dir == 'v') {
-            direction = Direction::Vertical;
+            direction = Vertical;
         }
         else if (dir == 'H' || dir == 'h') {
-            direction = Direction::Horizontal;
+            direction = Horizontal;
         }
         else {
             throw std::logic_error("Invalid input: incorrect ship");
@@ -181,10 +181,10 @@ bool is_collision(int size, Position position, Direction direction) { // экс�
         return true;
     }
 
-    const int end_row = (direction == Direction::Vertical)
+    const int end_row = (direction == Vertical)
         ? position.row() + size - 1
         : position.row();
-    const int end_col = (direction == Direction::Horizontal)
+    const int end_col = (direction == Horizontal)
         ? position.col() + size - 1
         : position.col();
 
